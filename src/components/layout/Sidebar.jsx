@@ -48,9 +48,9 @@ export default function Sidebar({ isOpen, onClose }) {
         {/* Logo */}
         <div className="flex items-center justify-between px-6 py-5">
           <NavLink to="/dashboard" className="flex items-center gap-2.5" onClick={onClose}>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center shadow-glow">
-              <Sparkles className="w-5 h-5 text-white" />
-            </div>
+           
+             <img src="/logo.svg" alt="Notely Logo" className="w-9 h-9 object-contain" />
+            
             <span className="text-xl font-bold text-gray-900 dark:text-white font-display">Notely</span>
           </NavLink>
           <button onClick={onClose} className="lg:hidden p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500">

@@ -1,7 +1,7 @@
 import { Outlet, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
+import { CircleArrowLeft } from 'lucide-react';
 import ThemeToggle from '../components/ui/ThemeToggle';
 
 export default function AuthLayout() {
@@ -16,11 +16,8 @@ export default function AuthLayout() {
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent-300 rounded-full blur-3xl" />
         </div>
         <div className="relative z-10 flex flex-col justify-between p-12 text-white">
-          <Link to="/" className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <span className="text-2xl font-bold font-display">Notely</span>
+          <Link to="/" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-colors" aria-label="Go back" >
+          <CircleArrowLeft className="w-6 h-6" />
           </Link>
 
           <div className="space-y-6">
@@ -59,7 +56,7 @@ export default function AuthLayout() {
             </motion.div>
           </div>
 
-          <p className="text-sm text-white/50">© 2025 Notely. All rights reserved.</p>
+         <p className="text-sm text-white/50">© {new Date().getFullYear()} Notely. All rights reserved.</p>
         </div>
       </div>
 
@@ -67,9 +64,7 @@ export default function AuthLayout() {
       <div className="flex-1 flex flex-col">
         <div className="flex items-center justify-between p-6">
           <Link to="/" className="lg:hidden flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-white" />
-            </div>
+            <img src="/logo.svg" alt="Notely Logo" className="w-8 h-8 object-contain" />
             <span className="text-lg font-bold text-gray-900 dark:text-white font-display">Notely</span>
           </Link>
           <div className="ml-auto">
