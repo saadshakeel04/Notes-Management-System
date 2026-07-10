@@ -9,14 +9,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function SettingsPage() {
-  const { user, logout } = useAuth();
+  const { displayName, email, signOut } = useAuth();
   const { notes } = useNotes();
   const navigate = useNavigate();
   const [confirmLogout, setConfirmLogout] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
 
   const handleLogout = () => {
-    logout();
+    signOut();
     navigate('/');
   };
 
@@ -102,8 +102,8 @@ export default function SettingsPage() {
         </div>
         <div className="flex items-center justify-between py-3 border-t border-gray-100 dark:border-slate-700/50">
           <div>
-            <p className="text-sm font-medium text-gray-700 dark:text-slate-300">{user?.email}</p>
-            <p className="text-sm text-gray-400 dark:text-slate-500">Signed in as {user?.name}</p>
+            <p className="text-sm font-medium text-gray-700 dark:text-slate-300">{email}</p>
+            <p className="text-sm text-gray-400 dark:text-slate-500">Signed in as {displayName}</p>
           </div>
           <Button variant="danger" size="sm" onClick={() => setConfirmLogout(true)}>
             <LogOut className="w-4 h-4" />

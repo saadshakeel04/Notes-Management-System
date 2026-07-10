@@ -1,24 +1,31 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Mail, Calendar, CreditCard as Edit3, Save, X } from 'lucide-react';
+import { Mail, Calendar, Edit3, Save, X, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNotes } from '../context/NotesContext';
 import { formatFullDate } from '../utils/helpers';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
-import Badge from '../components/ui/Badge';
 
 export default function Profile() {
-  const { user, updateProfile } = useAuth();
+  const { displayName, email, user, updateProfile } = useAuth();
   const { getStats } = useNotes();
   const stats = getStats();
   const [editing, setEditing] = useState(false);
-  const [name, setName] = useState(user?.name || '');
-  const [bio, setBio] = useState(user?.bio || '');
+  const [name, setName] = useState(displayName);
+  const [bio, setBio] = useState(user?.user_metadata?.bio || '');
+  const [saving, setSaving] = useState(false);
 
-  const handleSave = () => {
-    updateProfile({ name, bio });
-    setEditing(false);
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await updateProfile({ name, bio });
+      setEditing(false);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const statItems = [
@@ -42,7 +49,7 @@ export default function Profile() {
         <div className="px-6 pb-6">
           <div className="flex items-end justify-between -mt-12 mb-4">
             <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-brand-500 to-accent-500 text-white font-bold text-3xl flex items-center justify-center ring-4 ring-white dark:ring-slate-800">
-              {(user?.name || 'U').split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase()}
+              {(displayName || 'U').split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase()}
             </div>
             {!editing ? (
               <Button variant="secondary" size="sm" onClick={() => setEditing(true)}>
@@ -51,11 +58,11 @@ export default function Profile() {
               </Button>
             ) : (
               <div className="flex gap-2">
-                <Button variant="ghost" size="sm" onClick={() => { setEditing(false); setName(user?.name || ''); setBio(user?.bio || ''); }}>
+                <Button variant="ghost" size="sm" onClick={() => { setEditing(false); setName(displayName); setBio(user?.user_metadata?.bio || ''); }}>
                   <X className="w-4 h-4" />
                 </Button>
-                <Button size="sm" motion onClick={handleSave}>
-                  <Save className="w-4 h-4" />
+                <Button size="sm" motion onClick={handleSave} disabled={saving}>
+                  {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                   Save
                 </Button>
               </div>
@@ -78,16 +85,16 @@ export default function Profile() {
             </div>
           ) : (
             <>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-slate-100">{user?.name || 'User'}</h2>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-slate-100">{displayName}</h2>
               <p className="text-sm text-gray-500 dark:text-slate-400 flex items-center gap-1.5 mt-0.5">
                 <Mail className="w-3.5 h-3.5" />
-                {user?.email}
+                {email}
               </p>
-              {user?.bio && <p className="mt-3 text-sm text-gray-600 dark:text-slate-300">{user.bio}</p>}
-              {user?.joinedAt && (
+              {user?.user_metadata?.bio && <p className="mt-3 text-sm text-gray-600 dark:text-slate-300">{user.user_metadata.bio}</p>}
+              {user?.created_at && (
                 <p className="text-xs text-gray-400 dark:text-slate-500 flex items-center gap-1.5 mt-3">
                   <Calendar className="w-3.5 h-3.5" />
-                  Joined {formatFullDate(user.joinedAt)}
+                  Joined {formatFullDate(user.created_at)}
                 </p>
               )}
             </>

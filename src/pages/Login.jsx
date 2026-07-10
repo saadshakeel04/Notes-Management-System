@@ -1,30 +1,34 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock } from 'lucide-react';
+import { Mail, Lock, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 
 export default function Login() {
-  const { login } = useAuth();
+  const { signIn } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     if (!email || !password) {
       setError('Please fill in all fields');
       return;
     }
-    if (!email.includes('@')) {
-      setError('Please enter a valid email');
-      return;
+    setLoading(true);
+    try {
+      await signIn(email, password);
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.message || 'Failed to sign in');
+    } finally {
+      setLoading(false);
     }
-    login({ name: email.split('@')[0].replace(/^\w/, (c) => c.toUpperCase()), email });
-    navigate('/dashboard');
   };
 
   return (
@@ -59,8 +63,9 @@ export default function Login() {
             Forgot password?
           </button>
         </div>
-        <Button type="submit" motion className="w-full" size="lg">
-          Sign in
+        <Button type="submit" motion className="w-full" size="lg" disabled={loading}>
+          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+          {loading ? 'Signing in...' : 'Sign in'}
         </Button>
       </form>
 

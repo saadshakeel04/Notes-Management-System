@@ -12,7 +12,7 @@ import Badge from '../components/ui/Badge';
 export default function Dashboard() {
   const { search, searchResults } = useOutletContext();
   const { getStats, activeNotes, categories } = useNotes();
-  const { user } = useAuth();
+  const { displayName } = useAuth();
   const stats = getStats();
 
   if (search && searchResults) {
@@ -56,7 +56,7 @@ export default function Dashboard() {
         transition={{ duration: 0.3 }}
       >
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white font-display">
-          Welcome back, {user?.name?.split(' ')[0] || 'there'}!
+          Welcome back, {displayName?.split(' ')[0] || 'there'}!
         </h1>
         <p className="text-gray-500 dark:text-slate-400 mt-1">Here's what's happening with your notes.</p>
       </motion.div>

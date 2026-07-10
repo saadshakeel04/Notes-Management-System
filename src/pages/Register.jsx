@@ -1,20 +1,21 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, User } from 'lucide-react';
+import { Mail, Lock, User, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 
 export default function Register() {
-  const { register } = useAuth();
+  const { signUp } = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     if (!name || !email || !password) {
@@ -33,8 +34,15 @@ export default function Register() {
       setError('Passwords do not match');
       return;
     }
-    register({ name, email });
-    navigate('/dashboard');
+    setLoading(true);
+    try {
+      await signUp(email, password, name);
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.message || 'Failed to create account');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -75,8 +83,9 @@ export default function Register() {
           onChange={(e) => setConfirm(e.target.value)}
           error={error}
         />
-        <Button type="submit" motion className="w-full" size="lg">
-          Create account
+        <Button type="submit" motion className="w-full" size="lg" disabled={loading}>
+          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+          {loading ? 'Creating account...' : 'Create account'}
         </Button>
       </form>
 

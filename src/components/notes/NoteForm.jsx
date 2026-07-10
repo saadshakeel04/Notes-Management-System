@@ -21,6 +21,7 @@ export default function NoteForm({ note, onSubmit, onCancel }) {
   const [tagInput, setTagInput] = useState('');
   const [isFavorite, setIsFavorite] = useState(note?.isFavorite || false);
   const [isPinned, setIsPinned] = useState(note?.isPinned || false);
+  const [saving, setSaving] = useState(false);
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -48,16 +49,22 @@ export default function NoteForm({ note, onSubmit, onCancel }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e?.preventDefault();
+    setSaving(true);
     const data = { title, content, category, color, tags, isFavorite, isPinned };
-    if (isEdit) {
-      updateNote(note.id, data);
-    } else {
-      createNote(data);
+    try {
+      if (isEdit) {
+        await updateNote(note.id, data);
+      } else {
+        await createNote(data);
+      }
+      if (onSubmit) onSubmit();
+      navigate('/notes');
+    } catch (err) {
+      console.error(err);
+      setSaving(false);
     }
-    if (onSubmit) onSubmit();
-    navigate('/notes');
   };
 
   const colorClasses = getColorClasses(color);
@@ -159,9 +166,9 @@ export default function NoteForm({ note, onSubmit, onCancel }) {
         <Button type="button" variant="ghost" onClick={onCancel || (() => navigate(-1))}>
           Cancel
         </Button>
-        <Button type="submit" variant="primary" motion disabled={!title.trim() && !content.trim()}>
+        <Button type="submit" variant="primary" motion disabled={saving || (!title.trim() && !content.trim())}>
           <Save className="w-4 h-4" />
-          {isEdit ? 'Save Changes' : 'Create Note'}
+          {saving ? 'Saving...' : isEdit ? 'Save Changes' : 'Create Note'}
         </Button>
       </div>
     </form>

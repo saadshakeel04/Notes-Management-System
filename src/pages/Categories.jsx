@@ -9,7 +9,6 @@ import Modal from '../components/ui/Modal';
 import Input from '../components/ui/Input';
 import EmptyState from '../components/common/EmptyState';
 import ConfirmDialog from '../components/common/ConfirmDialog';
-import { generateId } from '../utils/helpers';
 
 const COLOR_OPTIONS = [
   { id: 'blue', name: 'Blue' },
@@ -30,9 +29,9 @@ export default function Categories() {
   const [newColor, setNewColor] = useState('blue');
   const [confirmDelete, setConfirmDelete] = useState(null);
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (!newName.trim()) return;
-    addCategory({ id: generateId(), name: newName.trim(), color: newColor, count: 0 });
+    await addCategory({ name: newName.trim(), color: newColor });
     setNewName('');
     setNewColor('blue');
     setShowModal(false);

@@ -14,7 +14,7 @@ const ICONS = {
 
 export default function Sidebar({ isOpen, onClose }) {
   const { getStats } = useNotes();
-  const { user } = useAuth();
+  const { displayName, email } = useAuth();
   const stats = getStats();
 
   const navCounts = {
@@ -131,11 +131,11 @@ export default function Sidebar({ isOpen, onClose }) {
         <div className="p-3 border-t border-gray-100 dark:border-slate-800">
           <NavLink to="/profile" onClick={onClose} className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-500 to-accent-500 text-white font-semibold flex items-center justify-center text-sm">
-              {(user?.name || 'U').split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase()}
+              {(displayName || 'U').split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 dark:text-slate-100 truncate">{user?.name || 'User'}</p>
-              <p className="text-xs text-gray-400 dark:text-slate-500 truncate">{user?.email || ''}</p>
+              <p className="text-sm font-medium text-gray-900 dark:text-slate-100 truncate">{displayName}</p>
+              <p className="text-xs text-gray-400 dark:text-slate-500 truncate">{email}</p>
             </div>
           </NavLink>
         </div>

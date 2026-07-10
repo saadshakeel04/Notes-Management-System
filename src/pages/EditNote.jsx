@@ -49,7 +49,7 @@ export default function EditNote() {
             <Pin className={`w-4 h-4 ${note.isPinned ? 'fill-brand-500' : ''}`} />
           </button>
           <button
-            onClick={() => { toggleArchive(note.id); navigate('/notes'); }}
+            onClick={async () => { await toggleArchive(note.id); navigate('/notes'); }}
             className="p-2 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-400 dark:text-slate-500 hover:text-teal-500 transition-colors"
           >
             <Archive className="w-4 h-4" />
@@ -76,7 +76,7 @@ export default function EditNote() {
       <ConfirmDialog
         isOpen={confirmDelete}
         onClose={() => setConfirmDelete(false)}
-        onConfirm={() => { deleteNote(note.id); navigate('/notes'); }}
+        onConfirm={async () => { await deleteNote(note.id); navigate('/notes'); }}
         title="Delete this note?"
         message="It will be moved to trash. You can restore it later."
         confirmLabel="Move to trash"
