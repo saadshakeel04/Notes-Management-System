@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Star, Pin, Archive, Trash2, MoreVertical, Folder, Clock } from 'lucide-react';
+import { Star, Pin, Archive, Trash2, MoveVertical as MoreVertical, Folder, Clock } from 'lucide-react';
 import Dropdown, { DropdownItem, DropdownSeparator } from '../ui/Dropdown';
 import Badge from '../ui/Badge';
 import { useNotes } from '../../context/NotesContext';

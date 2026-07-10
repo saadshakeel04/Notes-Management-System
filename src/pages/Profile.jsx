@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Mail, Calendar, Edit3, Save, X } from 'lucide-react';
+import { User, Mail, Calendar, CreditCard as Edit3, Save, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNotes } from '../context/NotesContext';
 import { formatFullDate } from '../utils/helpers';

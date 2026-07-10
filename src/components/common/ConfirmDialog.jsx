@@ -1,6 +1,6 @@
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
-import { AlertTriangle } from 'lucide-react';
+import { TriangleAlert as AlertTriangle } from 'lucide-react';
 
 export default function ConfirmDialog({
   isOpen,
